@@ -57,7 +57,7 @@ class StateStatusEnum(IntEnum):
 #
 #
 
-class ProcessJobProrityEnum(IntEnum):
+class ProcessJobPriorityEnum(IntEnum):
 	EM_JOB_PRI_SUPERHIGH    = 0
 	EM_JOB_PRI_HIGH         = 1
 	EM_JOB_PRI_NORMAL       = 2
@@ -84,7 +84,7 @@ class ProcessJobProrityEnum(IntEnum):
 #     (1) the element of aJobSleepPool[] , including:
 #           <1> Job State --> ProcessStateEnum | ThreadTypeEnum | ThreadCMDEnum | StateStatusEnum
 #           <2> Job Parameter
-#           <3> Job Priority --> ProcessJobProrityEnum
+#           <3> Job Priority --> ProcessJobPriorityEnum
 #           <4> sleep duration , unit:ms 
 #           <5> push to Sleep Pool time
 #
@@ -99,7 +99,7 @@ class Process_JobQueue:
 	def __init__(self):
 		self.__aCurrentState = [self.transStateEnum2Int([ProcessStateEnum.EM_PS_SYS_STABLE, ThreadTypeEnum.EM_TH_TYPE_NONE, ThreadCMDEnum.EM_TH_CMD_NONE, ThreadCMDEnum.EM_TH_CMD_NONE]), None]
 		self.__aPreviousState = self.__aCurrentState
-		self.__intTotalPriNum = self.transPriorityEnum2Int(ProcessJobProrityEnum.EM_JOB_PRI_VERYLOW) + 1
+		self.__intTotalPriNum = self.transPriorityEnum2Int(ProcessJobPriorityEnum.EM_JOB_PRI_VERYLOW) + 1
 		self.__aJobPool.clear()
 		self.__aJobSleepPool.clear()
 		for i in range(self.__intTotalPriNum):
@@ -274,8 +274,8 @@ def MT_OS_Init():
 	g_Mutex_JobPool = MT_OS_CreateMutex("Process Schedule Job Pool")
 	g_Mutex_SleepPool = MT_OS_CreateMutex("Process Schedule Sleep Pool")
 	
-	MT_OS_AppendJobPool(int(ProcessJobProrityEnum.EM_JOB_PRI_NORMAL) , MT_OS_TransStateEnum2Int([ProcessStateEnum.EM_PS_SYS_INIT, 0, 0, 0]), None)
-	MT_OS_AppendJobPool(int(ProcessJobProrityEnum.EM_JOB_PRI_NORMAL) , MT_OS_TransStateEnum2Int([ProcessStateEnum.EM_PS_SYS_IDEL, 0, 0, 0]), None)
+	MT_OS_AppendJobPool(int(ProcessJobPriorityEnum.EM_JOB_PRI_NORMAL) , MT_OS_TransStateEnum2Int([ProcessStateEnum.EM_PS_SYS_INIT, 0, 0, 0]), None)
+	MT_OS_AppendJobPool(int(ProcessJobPriorityEnum.EM_JOB_PRI_NORMAL) , MT_OS_TransStateEnum2Int([ProcessStateEnum.EM_PS_SYS_IDEL, 0, 0, 0]), None)
 
 def MT_OS_Schedule():
 	MT_OS_AcquireMutex(g_Mutex_JobPool)

@@ -158,7 +158,7 @@ def Mapi_AccessParseWeb_init(intThreadType, intThreadCmd, intStateSattus, aParam
 	
 	g_Mutex_Web = MT_OS_CreateMutex("Access Parse Web")
 	g_Web_Notify = Web_Notify_Operation()
-	MT_OS_AppendJobPool(int(ProcessJobProrityEnum.EM_JOB_PRI_HIGH), MT_OS_TransStateEnum2Int([ProcessStateEnum.EM_PS_SYS_PROGRASS_THREAD, ThreadTypeEnum.EM_TH_TYPE_ACCESS_PARSE_WEB, ThreadCMDEnum.EM_TH_CMD_CREATE_THREAD, 0]), [1])
+	MT_OS_AppendJobPool(int(ProcessJobPriorityEnum.EM_JOB_PRI_HIGH), MT_OS_TransStateEnum2Int([ProcessStateEnum.EM_PS_SYS_PROGRASS_THREAD, ThreadTypeEnum.EM_TH_TYPE_ACCESS_PARSE_WEB, ThreadCMDEnum.EM_TH_CMD_CREATE_THREAD, 0]), [1])
 
 def Mapi_AccessParseWeb_action(intThreadType, intThreadCmd, intStateSattus, aParam):
 	if (intThreadCmd == ThreadCMDEnum.EM_TH_CMD_CREATE_THREAD):
