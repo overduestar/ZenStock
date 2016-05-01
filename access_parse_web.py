@@ -107,12 +107,12 @@ def __web_access_parse_thread(x, aParam):
 	thd = aParam[-1] #get aParam[] last item to notify thread
 	aNotifyInfo = None
 	while(1):
-		MT_OS_AcquireMutex(g_Mutex_Web)
+		mt_os_acquire_mutex(g_Mutex_Web)
 		aNotifyInfo = g_Web_Notify.getNotify()
-		MT_OS_ReleaseMutex(g_Mutex_Web)
+		mt_os_release_mutex(g_Mutex_Web)
 
 		if (aNotifyInfo != None):
-			MT_OS_AcquireMutex(g_Mutex_Web)
+			mt_os_acquire_mutex(g_Mutex_Web)
 
 			intNotifyAction = aNotifyInfo[0]
 			aNotifyParam = aNotifyInfo[1]
@@ -122,9 +122,9 @@ def __web_access_parse_thread(x, aParam):
 				__web_access_stock_company(aNotifyParam)
 			
 			g_Web_Notify.removeNotify()
-			MT_OS_ReleaseMutex(g_Mutex_Web)
+			mt_os_release_mutex(g_Mutex_Web)
 
-		MT_OS_SleepMs(100)
+		mt_os_sleep_ms(100)
 
 
 		
@@ -148,17 +148,17 @@ def __web_notify_action(aParam):
 		if (sNotifyStr == "UI Request Daily Access"):  #depand on "ui_operatin" send notify action string
 			intNotifyAction = WebNotifyEnum.EM_WEB_UI_REQUEST_DAIL
 
-		MT_OS_AcquireMutex(g_Mutex_Web)
+		mt_os_acquire_mutex(g_Mutex_Web)
 		g_Web_Notify.appendNotify(intNotifyAction, aNotifyParam)
-		MT_OS_ReleaseMutex(g_Mutex_Web)
+		mt_os_release_mutex(g_Mutex_Web)
 
 def Mapi_AccessParseWeb_init(intThreadType, intThreadCmd, intStateSattus, aParam):
 	global g_Mutex_Web
 	global g_Web_Notify
 	
-	g_Mutex_Web = MT_OS_CreateMutex("Access Parse Web")
+	g_Mutex_Web = mt_os_create_mutex("Access Parse Web")
 	g_Web_Notify = Web_Notify_Operation()
-	MT_OS_AppendJobPool(int(ProcessJobPriorityEnum.EM_JOB_PRI_HIGH), MT_OS_TransStateEnum2Int([ProcessStateEnum.EM_PS_SYS_PROGRASS_THREAD, ThreadTypeEnum.EM_TH_TYPE_ACCESS_PARSE_WEB, ThreadCMDEnum.EM_TH_CMD_CREATE_THREAD, 0]), [1])
+	mt_os_append_job_pool(int(ProcessJobPriorityEnum.EM_JOB_PRI_HIGH), mt_os_trans_state_enum2int([ProcessStateEnum.EM_PS_SYS_PROGRASS_THREAD, ThreadTypeEnum.EM_TH_TYPE_ACCESS_PARSE_WEB, ThreadCMDEnum.EM_TH_CMD_CREATE_THREAD, 0]), [1])
 
 def Mapi_AccessParseWeb_action(intThreadType, intThreadCmd, intStateSattus, aParam):
 	if (intThreadCmd == ThreadCMDEnum.EM_TH_CMD_CREATE_THREAD):

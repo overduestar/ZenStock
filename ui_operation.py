@@ -123,7 +123,7 @@ def __ui_operation_polling_usercommand_thread(x, aParam):
 				
 				#send notify to "access_parse_web" with parameter :[aUIData, "UI Request Access"]
 				# --> "UI Request Access" is used to notify "access_parse_web" action
-				MT_OS_AppendJobPool(int(ProcessJobPriorityEnum.EM_JOB_PRI_HIGH), MT_OS_TransStateEnum2Int([ProcessStateEnum.EM_PS_SYS_PROGRASS_THREAD, ThreadTypeEnum.EM_TH_TYPE_ACCESS_PARSE_WEB, ThreadCMDEnum.EM_TH_CMD_NOTIFY_THREAD, 0]), [aUIData, "UI Request Daily Access"])
+				mt_os_append_job_pool(int(ProcessJobPriorityEnum.EM_JOB_PRI_HIGH), mt_os_trans_state_enum2int([ProcessStateEnum.EM_PS_SYS_PROGRASS_THREAD, ThreadTypeEnum.EM_TH_TYPE_ACCESS_PARSE_WEB, ThreadCMDEnum.EM_TH_CMD_NOTIFY_THREAD, 0]), [aUIData, "UI Request Daily Access"])
 					
 
 def __ui_create_thread(aParam):
@@ -140,10 +140,10 @@ def Mapi_UI_init(intThreadType, intThreadCmd, intStateSattus, aParam):
 	global g_Mutex_UI
 	global g_UIOperation
 	
-	g_Mutex_UI = MT_OS_CreateMutex("UI Operation")
+	g_Mutex_UI = mt_os_create_mutex("UI Operation")
 	g_UIOperation = UI_Operation()
 	print("Mapi_UI_init", aParam)
-	MT_OS_AppendJobPool(int(ProcessJobPriorityEnum.EM_JOB_PRI_HIGH), MT_OS_TransStateEnum2Int([ProcessStateEnum.EM_PS_SYS_PROGRASS_THREAD, ThreadTypeEnum.EM_TH_TYPE_UI_OPERATION, ThreadCMDEnum.EM_TH_CMD_CREATE_THREAD, 0]), [1])
+	mt_os_append_job_pool(int(ProcessJobPriorityEnum.EM_JOB_PRI_HIGH), mt_os_trans_state_enum2int([ProcessStateEnum.EM_PS_SYS_PROGRASS_THREAD, ThreadTypeEnum.EM_TH_TYPE_UI_OPERATION, ThreadCMDEnum.EM_TH_CMD_CREATE_THREAD, 0]), [1])
 
 def Mapi_UI_action(intThreadType, intThreadCmd, intStateSattus, aParam):
 	if (intThreadCmd == ThreadCMDEnum.EM_TH_CMD_CREATE_THREAD):

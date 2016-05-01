@@ -62,7 +62,7 @@ def Mapi_DB_Capture_StockCompany(aParam):
 def Mapi_DB_init(intThreadType, intThreadCmd, intStateSattus, aParam):
 	global g_Mutex_DB
 	global g_DB_Operation
-	g_Mutex_DB = MT_OS_CreateMutex("DB Operation")
+	g_Mutex_DB = mt_os_create_mutex("DB Operation")
 	g_DB_Operation = DB_Operation()
 
 

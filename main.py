@@ -29,14 +29,14 @@ def mapi_system_init(int_process_state, int_thread_type, int_thread_cmd, int_sta
 
 #if (0):
 if __name__ == '__main__':
-    msm.MT_OS_Init()
+    msm.mt_os_init()
 
     INT_PROCESS_BITMAP = (0xFF<<24)
     INT_THREAD_TYPE_BITMAP = (0xFF<<16)
     INT_THREAD_CMD_BITMAP = (0xFF<<8)
     INT_STATE_STATUS_BITMAP = (0xFF<<0)
     while 1: #main loop
-        A_CURRENT_STATE = msm.MT_OS_Schedule()
+        A_CURRENT_STATE = msm.mt_os_schedule()
         INT_PROCESS_STATE = A_CURRENT_STATE[0] & INT_PROCESS_BITMAP
         INT_THREAD_TYPE = A_CURRENT_STATE[0] & INT_THREAD_TYPE_BITMAP
         INT_THREAD_CMD = A_CURRENT_STATE[0] & INT_THREAD_CMD_BITMAP
@@ -50,7 +50,7 @@ if __name__ == '__main__':
                                    INT_THREAD_CMD, INT_STATE_STATUS, A_CURRENT_STATE[1])
         elif INT_PROCESS_STATE == msm.ProcessStateEnum.EM_PS_SYS_IDEL:
             #print("System Idle")
-            msm.MT_OS_SleepMs(500)
-            msm.MT_OS_AppendJobPool(int(ProcessJobPriorityEnum.EM_JOB_PRI_NORMAL),
-                                    msm.MT_OS_TransStateEnum2Int(
-                                        [ProcessStateEnum.EM_PS_SYS_IDEL, 0, 0, 0]), None)
+            msm.mt_os_sleep_ms(500)
+            msm.mt_os_append_job_pool(int(ProcessJobPriorityEnum.EM_JOB_PRI_NORMAL),
+                                      msm.mt_os_trans_state_enum2int(
+                                          [ProcessStateEnum.EM_PS_SYS_IDEL, 0, 0, 0]), None)
