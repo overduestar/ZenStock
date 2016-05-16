@@ -101,10 +101,6 @@ class ProcessJobQueue:
     __a_job_pool = []
     __a_job_sleep_pool = []
 
-    __a_current_state = 0
-    __a_previous_state = 0
-    __int_total_pri_num = 0
-
     def __init__(self):
         self.__a_current_state = [self.trans_state_enum2int(
             [ProcessStateEnum.EM_PS_SYS_STABLE, ThreadTypeEnum.EM_TH_TYPE_NONE,
@@ -303,8 +299,8 @@ def mt_os_schedule():
     """ schedule """
     mt_os_acquire_mutex(G_MUTEX_JOB_POOL)
     mt_os_acquire_mutex(G_MUTEX_SLEEP_POOL)
-    G_PROCESS_SCHEDULE.get_and_remove_job_pool()
-    a_state = G_PROCESS_SCHEDULE.get_schedule_current_state()
+    g_process_schedule.get_and_remove_job_pool()
+    a_state = g_process_schedule.get_schedule_current_state()
     mt_os_release_mutex(G_MUTEX_SLEEP_POOL)
     mt_os_release_mutex(G_MUTEX_JOB_POOL)
     return a_state
@@ -312,20 +308,20 @@ def mt_os_schedule():
 def mt_os_append_job_pool(int_priority, int_state, a_param):
     """ append job pool """
     mt_os_acquire_mutex(G_MUTEX_JOB_POOL)
-    int_ret_value = G_PROCESS_SCHEDULE.append_job_pool(int_priority, int_state, a_param)
+    int_ret_value = g_process_schedule.append_job_pool(int_priority, int_state, a_param)
     mt_os_release_mutex(G_MUTEX_JOB_POOL)
     return int_ret_value
 
 def mt_os_append_sleep_pool(a_sleep_param):
     """ append sleep pool """
     mt_os_acquire_mutex(G_MUTEX_SLEEP_POOL)
-    int_ret_value = G_PROCESS_SCHEDULE.append_sleep_pool(a_sleep_param)
+    int_ret_value = g_process_schedule.append_sleep_pool(a_sleep_param)
     mt_os_release_mutex(G_MUTEX_SLEEP_POOL)
     return int_ret_value
 
 def mt_os_trans_state_enum2int(a_state):
     """ trans state enum to int """
-    return G_PROCESS_SCHEDULE.trans_state_enum2int(a_state)
+    return g_process_schedule.trans_state_enum2int(a_state)
 
 def mt_os_sleep_ms(int_ms):
     """ sleep in ms """
@@ -345,7 +341,7 @@ def mt_os_release_mutex(lock):
     return G_PROCESS_COMMUNICATION.release_mutex(lock)
 
 
-G_PROCESS_SCHEDULE = ProcessJobQueue()
+g_process_schedule = ProcessJobQueue()
 G_PROCESS_COMMUNICATION = ProcessCommunication()
 G_MUTEX_JOB_POOL = mt_os_create_mutex("Process Schedule Job Pool")
 G_MUTEX_SLEEP_POOL = mt_os_create_mutex("Process Schedule Sleep Pool")
