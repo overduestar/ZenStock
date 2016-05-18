@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import re
 import csv
@@ -15,37 +17,45 @@ import system_info_mantain
 #         <1> company stock  serial number
 #         <2> company name
 #
-class csvDB_StockCompanyInfo:
-	aStockCompanyTab = []
+class CsvDBStockCompanyInfo(object):
+    """ CsvDBStcokCompanyInfo public class """
+    aStockCompanyTab = []
 
-	def initStockCompanyInfo(self):
-		self.aStockCompanyTab.clear()
+    def __init__(self):
+        pass
 
-	def appendStockCompanyInfo(self, intIdx, aCompanyInfo):
-		if (intIdx < len(self.aStockCompanyTab) and intIdx >= 0):
-			self.aStockCompanyTab[intIdx] = aCompanyInfo
-			return intIdx
-		else:
-			self.aStockCompanyTab.append(aCompanyInfo)
-			return (len(self.aStockCompanyTab) - 1)
+    def init_stockcompany(self):
+        """ init public class function """
+        pass
 
-	def updateStockComapny(self, intIdx):
-		if (intIdx >= 0 and intIdx < len(self.aStockCompanyTab)):
-			return self.aStockCompanyTab[intIdx]
-		else:
-			return None
+    def append_stockcompany(self, int_index, a_company_info):
+        """ append public class function """
+        if int_index < len(self.aStockCompanyTab) and int_index >= 0:
+            self.aStockCompanyTab[int_index] = a_company_info
+            return int_index
+        else:
+            self.aStockCompanyTab.append(a_company_info)
+            return len(self.aStockCompanyTab)-1
 
-	def getStockCompanyInfo(self, intIdx):
-		if (intIdx < len(self.aStockCompanyTab)):
-			return self.aStockCompanyTab[intIdx]
-		return None
+    def update_stockcomapny(self, int_index):
+        """ append public class function """
+        if int_index >= 0 and int_index < len(self.aStockCompanyTab):
+            return self.aStockCompanyTab[int_index]
+        else:
+            return None
 
-	def removeStockCompanyInfo(self, intIdx):
-		if (intIdx < len(self.aStockCompanyTab)):
-			self.aStockCompanyTab.pop(intIdx)
-			return 1
-		return 0
+    def get_stockcompany(self, int_index):
+        """ append public class function """
+        if int_index < len(self.aStockCompanyTab):
+            return self.aStockCompanyTab[int_index]
+        return None
 
+    def remove_stockcompany(self, int_index):
+        """ append public class function """
+        if int_index < len(self.aStockCompanyTab):
+            self.aStockCompanyTab.pop(int_index)
+            return 1
+        return 0
 
 # [csvDB_StockDailyInfo ===================]
 # 1. Provide to store  Stock Company Daily Report , including:
@@ -56,7 +66,8 @@ class csvDB_StockCompanyInfo:
 #     etc.....
 #
 # 2. Describe aStockDailyTab[] :
-#    (1) very imporant, index "must" match with csvDB_StockCompanyInfo.aStockCompanyTab[] for easy fetching
+#    (1) very imporant, index "must" match with
+#        csvDB_StockCompanyInfo.aStockCompanyTab[] for easy fetching
 #    (2) elements of __aStockCompanyTab , including:
 #         <1> Date
 #         <2> Trading Volume
@@ -68,69 +79,70 @@ class csvDB_StockCompanyInfo:
 #         <8> Spread
 #         <9> Auction items
 #
-class csvDB_StockDailyInfo:
-	aStockDailyTab = []
+class CsvDBStockDailyInfo(object):
+    """ CsvDBStockDailyInfo public class """
+    aStockDailyTab = []
 
-	def initStockDailyInfo(self):
-		self.aStockDailyTab.clear()
+    def __init__(self):
+        pass
+
+    def init_stockdaily_info(self):
+        """ init public class function """
+        pass
 
 
 def __drv_db_get_pathformat_stockcommpany():
-	aFile_Format = system_info_mantain.Mapi_SysInfo_GetAtrributeValue(0, "system.ini", "Stock Company Info", ["file path", "file name"])
-	return (aFile_Format[0]+aFile_Format[1])
+    a_file_format = system_info_mantain.Mapi_SysInfo_GetAtrributeValue(0, "system.ini", \
+                "Stock Company Info", ["file path", "file name"])
+    return a_file_format[0]+a_file_format[1]
 
-# 1. read "./data/stock/stock_company.csv" , which of file path is mantained by system.ini , "Stock Company Info"
+# 1. read "./data/stock/stock_company.csv" ,
+# which of file path is mantained by system.ini , "Stock Company Info"
 # 2. (1) if "./data/stock/stock_company.csv" does not exist, then return 0;
 #    (2) otherwise , if "./data/stock/stock_company.csv" exists, return 1
 #
-def Mdrv_DB_Connect_StockCompany(aParam):
-	sFilePath = __drv_db_get_pathformat_stockcommpany()
-	if (os.path.isfile(sFilePath) == False):
-		sDicPath = os.path.dirname(sFilePath)
-		if not os.path.isdir(sDicPath):
-			os.makedirs(sDicPath)
+def mdrv_db_connect_stockcompany(a_param):
+    """ public function """
+    s_file_path = __drv_db_get_pathformat_stockcommpany()
+    if not os.path.isfile(s_file_path):
+        s_dic_path = os.path.dirname(s_file_path)
+        if not os.path.isdir(s_dic_path):
+            os.makedirs(s_dic_path)
+        return 0
+    else:
+        if os.path.getsize(s_file_path) == 0:
+            return 0
+    return 1
+
+def mdrv_db_update_stockcompany(a_stockcompany):
+	if (a_stockcompany == None):
 		return 0
-	else:
-		if (os.path.getsize(sFilePath) == 0):
-			return 0
+
+	s_file_path = __drv_db_get_pathformat_stockcommpany()
+	fp_stockcompany = open(s_file_path ,'w')
+
+	fp_stockcompany.write("Number,Name\n")
+	for i in range(len(a_stockcompany)):
+		s_stock_serial = a_stockcompany[i][0]
+		s_stock_name = a_stockcompany[i][1]
+		s_line = s_stock_serial + "," + s_stock_name + "\n"
+		fp_stockcompany.write(s_line)
+
+	fp_stockcompany.close()
 	return 1
 
-def Mdrv_DB_Update_StockCompany(aStockCompanyInfo):
-	if (aStockCompanyInfo == None):
-		return 0
+def mdrv_db_capture_stockcompany(a_param):
+    a_stocckcompany = []
+    s_file_path = __drv_db_get_pathformat_stockcommpany()
 
-	sFilePath = __drv_db_get_pathformat_stockcommpany()
-	fpSCompany = open(sFilePath ,'w')
+    with open(s_file_path, 'r') as fp_stockcompany:
+        for row in csv.reader(fp_stockcompany):
+            if row[0] == "Number":
+                continue
+            a_company = []
+            for i in range(len(row)):
+                a_company.append(row[i])
+            if len(a_company) > 0:
+                a_stockcompnay.append(a_company)
 
-	fpSCompany.write("Number,Name\n")
-	for i in range(len(aStockCompanyInfo)):
-		sStockSerial = aStockCompanyInfo[i][0]
-		sStockName = aStockCompanyInfo[i][1]
-		sLine = sStockSerial + "," + sStockName + "\n"
-		fpSCompany.write(sLine)
-
-	fpSCompany.close()
-	return 1
-
-def Mdrv_DB_Capture_StockCompany(aParam):
-	aStockCompanyInfo = []
-	sFilePath = __drv_db_get_pathformat_stockcommpany()
-
-	with open(sFilePath, 'r') as fpSCompany:
-		for row in csv.reader(fpSCompany):
-			if (row[0] == "Number"):
-				continue
-				
-			aCompany = []
-			for i in range(len(row)):
-				aCompany.append(row[i])
-			if (len(aCompany) > 0):
-				aStockCompanyInfo.append(aCompany)
-
-	return aStockCompanyInfo
-
-	
-	
-
-
-
+    return a_stockcompany
