@@ -23,7 +23,7 @@ def mapi_system_init(int_process_state, int_thread_type, int_thread_cmd, int_sta
     ui_operation.Mapi_UI_init(int_thread_type, int_thread_cmd, int_state_status, None)
     apw.Mapi_AccessParseWeb_init(int_thread_type, int_thread_cmd,
                                  int_state_status, None)
-    database_operation.Mapi_DB_init(int_thread_type, int_thread_cmd, int_state_status, None)
+    database_operation.mapi_db_init(int_thread_type, int_thread_cmd, int_state_status, None)
     system_info_mantain.Mapi_SysInfo_Init()
 
 
