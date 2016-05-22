@@ -11,7 +11,7 @@ def progress_thread_action(int_process_state, int_thread_type, int_thread_cmd,
     """ progress thread action """
     del int_process_state
     if int_thread_type == msm.ThreadTypeEnum.EM_TH_TYPE_ACCESS_PARSE_WEB:
-        apw.Mapi_AccessParseWeb_action(int_thread_type, int_thread_cmd,
+        apw.mapi_access_parse_web_action(int_thread_type, int_thread_cmd,
                                        int_state_status, a_param)
     elif int_thread_type == msm.ThreadTypeEnum.EM_TH_TYPE_UI_OPERATION:
         ui_operation.Mapi_UI_action(int_thread_type, int_thread_cmd, int_state_status, a_param)
@@ -21,7 +21,7 @@ def mapi_system_init(int_process_state, int_thread_type, int_thread_cmd, int_sta
     """ init system """
     del int_process_state, a_param
     ui_operation.Mapi_UI_init(int_thread_type, int_thread_cmd, int_state_status, None)
-    apw.Mapi_AccessParseWeb_init(int_thread_type, int_thread_cmd,
+    apw.mapi_access_parse_web_init(int_thread_type, int_thread_cmd,
                                  int_state_status, None)
     database_operation.mapi_db_init(int_thread_type, int_thread_cmd, int_state_status, None)
     system_info_mantain.Mapi_SysInfo_Init()
