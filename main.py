@@ -3,7 +3,7 @@ from main_state_machine import ProcessStateEnum, ProcessJobPriorityEnum
 import main_state_machine as msm
 import access_parse_web as apw
 import ui_operation
-import system_info_mantain
+import system_info_maintain
 import database_operation
 
 def progress_thread_action(int_process_state, int_thread_type, int_thread_cmd,
@@ -24,7 +24,7 @@ def mapi_system_init(int_process_state, int_thread_type, int_thread_cmd, int_sta
     apw.mapi_access_parse_web_init(int_thread_type, int_thread_cmd,
                                  int_state_status, None)
     database_operation.mapi_db_init(int_thread_type, int_thread_cmd, int_state_status, None)
-    system_info_mantain.Mapi_SysInfo_Init()
+    system_info_maintain.mapi_sysinfo_init()
 
 
 #if (0):

@@ -7,7 +7,7 @@ import urllib
 import codecs
 import re
 import main_state_machine as msm
-import system_info_mantain
+import system_info_maintain
 import database_operation as do
 
 G_MUTEX_WEB = 0
@@ -55,7 +55,7 @@ def __web_access_parse_stock_comapny(a_param):
     """ web access parse stock compnay """
     _ = a_param
     a_stock_compan_info = []
-    a_url_path = system_info_mantain.Mapi_SysInfo_GetAtrributeValue(0, "system.ini",
+    a_url_path = system_info_maintain.mapi_sysinfo_get_atrribute_value(0, "system.ini",
                                                                     "Stock Serail List Web",
                                                                     ["web site"])
     s_url_path = a_url_path[0]

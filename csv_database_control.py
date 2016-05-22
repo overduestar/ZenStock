@@ -3,7 +3,7 @@
 import os
 import re
 import csv
-import system_info_mantain
+import system_info_maintain
 # [csvDB_StockCompanyInfo ===================]
 # 1. Provide to descibe  Company info , including:
 #    (1) company stock serial number
@@ -92,7 +92,7 @@ class CsvDBStockDailyInfo(object):
 
 
 def __drv_db_get_pathformat_stockcommpany():
-    a_file_format = system_info_mantain.Mapi_SysInfo_GetAtrributeValue(0, "system.ini", \
+    a_file_format = system_info_maintain.mapi_sysinfo_get_atrribute_value(0, "system.ini", \
                 "Stock Company Info", ["file path", "file name"])
     return a_file_format[0]+a_file_format[1]
 
