@@ -82,12 +82,12 @@ def __web_access_parse_stock_comapny(a_param):
     return a_stock_compan_info
 
 def __web_access_stock_company(a_param):
-    int_ret = do.Mapi_DB_Connect_StockCompany(a_param)
+    int_ret = do.mapi_db_connect_stockcompany(a_param)
     if int_ret == 0: #connect stock company fail
         a_stock_company_info = __web_access_parse_stock_comapny(a_param)
-        do.Mapi_DB_Update_StockCompany(a_stock_company_info)
+        do.mapi_db_update_stockcompany(a_stock_company_info)
 
-    return do.Mapi_DB_Capture_StockCompany(a_param)
+    return do.mapi_db_capture_stockcompany(a_param)
 
 
 def __web_access_parse_stock_daily(d_start_date, d_end_date, s_stock_list):
