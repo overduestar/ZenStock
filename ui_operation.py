@@ -2,6 +2,7 @@
 import threading
 import datetime
 import main_state_machine as msm
+import stockalgo_pick_point as pick_point_algo
 
 g_Mutex_UI = None
 g_UIOperation = None
@@ -68,6 +69,85 @@ def __ui_operation_default_thread(xxx, a_param):
     _ = xxx
     print("__ui_default_thread start:", a_param)
 
+
+def __ui_operation_case_cmd_inquire_during_stockinfo():
+    int_step = 0
+    d_start_date = None
+    d_end_date = None
+    s_stock = ""
+    int_warning = 0
+    while int_step < 3:
+        if int_step == 0:
+            s_start_date = input('Please enter Start Date(yyyy/mm/dd) : ')
+            if len(s_start_date) == 0:
+                continue
+            d_start_date = g_UIOperation.str_date(s_start_date)
+            if d_start_date is None:
+                int_warning = __ui_check_usercommand_warning()
+                if int_warning == 1:
+                    int_step = 0
+                    continue
+                elif int_warning == 2:
+                    break
+                else:
+                    continue
+            int_step = 1 #notify to next user command setting
+
+        if int_step == 1:
+            s_end_date = input('Please enter End Date(yyyy/mm/dd) : ')
+            if len(s_end_date) == 0:
+                continue
+            d_end_date = g_UIOperation.str_date(s_end_date)
+            if d_end_date is None:
+                int_warning = __ui_check_usercommand_warning()
+                if int_warning == 1:
+                    int_step = 0
+                    continue
+                elif int_warning == 2:
+                    break
+                else:
+                    continue
+            int_step = 2 #notify to next user command setting
+
+        if int_step == 2:
+            s_stock = input('Please enter Stock Number or enter \'all\' : ')
+            if len(s_stock) == 0:
+                continue
+            s_stock = g_UIOperation.check_stock(s_stock)
+            if s_stock is None:
+                int_warning = __ui_check_usercommand_warning()
+                if int_warning == 1:
+                    int_step = 0
+                    continue
+                elif int_warning == 2:
+                    break
+                else:
+                    continue
+            int_step = 3 #notify to next user command setting
+
+    if int_step == 3: #notify to success finish "while (int_step < 3)"
+        a_ui_data = []
+        a_ui_data.append(d_start_date)
+        a_ui_data.append(d_end_date)
+        a_ui_data.append(s_stock)
+        g_UIOperation.update_ui_data(a_ui_data)
+
+        #send notify to "access_parse_web" with parameter :[a_ui_data, "UI Request Access"]
+        # --> "UI Request Access" is used to notify "access_parse_web" action
+        msm.mt_os_append_job_pool(int(msm.ProcessJobPriorityEnum.EM_JOB_PRI_HIGH),
+                                  msm.mt_os_trans_state_enum2int(
+                                      [msm.ProcessStateEnum.EM_PS_SYS_PROGRASS_THREAD,
+                                       msm.ThreadTypeEnum.EM_TH_TYPE_ACCESS_PARSE_WEB,
+                                       msm.ThreadCMDEnum.EM_TH_CMD_NOTIFY_THREAD, 0]),
+                                  [a_ui_data, "UI Request Daily Access"])
+
+def __ui_operation_case_cmd_pickalgo_anchor_pressure():
+    print("__ui_operation_case_cmd_pickalgo_anchor_pressure start")
+    s_date = input('Please enter query Date(yyyy/mm/dd) : ')
+    d_date = g_UIOperation.str_date(s_date)
+    pick_point_algo.mapi_pointalgo_query(d_date)
+    
+
 def __ui_operation_polling_usercommand_thread(xxx, a_param):
     _ = xxx
     print("__ui_operation_polling_usercommand_thread start:", a_param)
@@ -77,76 +157,9 @@ def __ui_operation_polling_usercommand_thread(xxx, a_param):
         s_tags = input('')
         #user key "00112233" as password to insert command
         if s_tags == "00112233":
-            int_step = 0
-            d_start_date = None
-            d_end_date = None
-            s_stock = ""
-            int_warning = 0
-            while int_step < 3:
-                if int_step == 0:
-                    s_start_date = input('Please enter Start Date(yyyy/mm/dd) : ')
-                    if len(s_start_date) == 0:
-                        continue
-                    d_start_date = g_UIOperation.str_date(s_start_date)
-                    if d_start_date is None:
-                        int_warning = __ui_check_usercommand_warning()
-                        if int_warning == 1:
-                            int_step = 0
-                            continue
-                        elif int_warning == 2:
-                            break
-                        else:
-                            continue
-                    int_step = 1 #notify to next user command setting
-
-                if int_step == 1:
-                    s_end_date = input('Please enter End Date(yyyy/mm/dd) : ')
-                    if len(s_end_date) == 0:
-                        continue
-                    d_end_date = g_UIOperation.str_date(s_end_date)
-                    if d_end_date is None:
-                        int_warning = __ui_check_usercommand_warning()
-                        if int_warning == 1:
-                            int_step = 0
-                            continue
-                        elif int_warning == 2:
-                            break
-                        else:
-                            continue
-                    int_step = 2 #notify to next user command setting
-
-                if int_step == 2:
-                    s_stock = input('Please enter Stock Number or enter \'all\' : ')
-                    if len(s_stock) == 0:
-                        continue
-                    s_stock = g_UIOperation.check_stock(s_stock)
-                    if s_stock is None:
-                        int_warning = __ui_check_usercommand_warning()
-                        if int_warning == 1:
-                            int_step = 0
-                            continue
-                        elif int_warning == 2:
-                            break
-                        else:
-                            continue
-                    int_step = 3 #notify to next user command setting
-
-            if int_step == 3: #notify to success finish "while (int_step < 3)"
-                a_ui_data = []
-                a_ui_data.append(d_start_date)
-                a_ui_data.append(d_end_date)
-                a_ui_data.append(s_stock)
-                g_UIOperation.update_ui_data(a_ui_data)
-
-                #send notify to "access_parse_web" with parameter :[a_ui_data, "UI Request Access"]
-                # --> "UI Request Access" is used to notify "access_parse_web" action
-                msm.mt_os_append_job_pool(int(msm.ProcessJobPriorityEnum.EM_JOB_PRI_HIGH),
-                                          msm.mt_os_trans_state_enum2int(
-                                              [msm.ProcessStateEnum.EM_PS_SYS_PROGRASS_THREAD,
-                                               msm.ThreadTypeEnum.EM_TH_TYPE_ACCESS_PARSE_WEB,
-                                               msm.ThreadCMDEnum.EM_TH_CMD_NOTIFY_THREAD, 0]),
-                                          [a_ui_data, "UI Request Daily Access"])
-
+            __ui_operation_case_cmd_inquire_during_stockinfo()
+        elif s_tags == "x":
+            __ui_operation_case_cmd_pickalgo_anchor_pressure()
 
 def __ui_create_thread(a_param):
     try:
